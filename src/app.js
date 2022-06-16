@@ -1,6 +1,6 @@
 import express from "express"
 import morgan from "morgan"
-import routas from "./routes/routes";
+import routas from "./routes/UserRoutes";
 
 const app=express();
 
@@ -12,6 +12,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 //Routes
-app.use("/api/users", routas);
+app.use("/users", routas);
+
 
 export default app;

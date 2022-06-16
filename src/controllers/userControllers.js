@@ -1,5 +1,6 @@
-import { getConnection } from "./../database/database"
+import { getConnection } from "../database/database"
 
+//Ger all users
 const getUsers = async (req, res) =>{
     try{
     const connection = await getConnection();
@@ -11,24 +12,26 @@ const getUsers = async (req, res) =>{
     }   
 };
 
+//Create a user
 const addUser = async (req, res) =>{
     try{
-    const { correo, usuario, contraseña , type } = req.body;
+    const { email, user, password , type } = req.body;
 
-    if(correo == undefined || usuario == undefined || contraseña == undefined || type == undefined){
+    if(email == undefined || user == undefined || password == undefined || type == undefined){
         res.status(400).json({message : "Bad request, please fill all the inputs"})
     }
 
     const connection = await getConnection(); 
     const result = await connection.query(`INSERT INTO usuarios (correo, usuario, contraseña, type)
-    VALUES ("${correo}", "${usuario}", "${contraseña}", ${type});`);
-    res.json({message: "User added"})
+    VALUES ("${email}", "${user}", "${password}", ${type});`);
+    res.json({message: "User added"}, result);
     }catch(error){
         res.status(500);
         res.send(error.message);
     }   
 };
 
+//Get one user
 const getOneUser = async (req, res) =>{
     try{
     const { id }=req.params;
@@ -41,18 +44,19 @@ const getOneUser = async (req, res) =>{
     }   
 };
 
+// Update a user
 const UpdateUser = async (req, res) =>{
     try{
     const { id }=req.params;
-    const { correo, usuario, contraseña , type } = req.body;
+    const { email, user, password, type } = req.body;
     
-    if(id == undefined ||correo == undefined || usuario == undefined || contraseña == undefined || type == undefined){
+    if(id == undefined ||email == undefined || user == undefined || password == undefined || type == undefined){
         res.status(400).json({message : "Bad request, please fill all the inputs"})
     }
 
     const connection = await getConnection();
     const result = await connection.query(`UPDATE usuarios SET
-    correo="${correo}", usuario="${usuario}", contraseña="${contraseña}", type="${type}" WHERE id= ${id};`);
+    correo="${email}", usuario="${user}", contraseña="${password}", type="${type}" WHERE id= ${id};`);
     res.json(result);
     }catch(error){
         res.status(500);
@@ -60,6 +64,7 @@ const UpdateUser = async (req, res) =>{
     }   
 };
 
+//Delete a user
 const deleteUser = async (req, res) =>{
     try{
     const { id }=req.params;
